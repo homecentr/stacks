@@ -1,0 +1,27 @@
+all:
+  hosts:
+    192.168.2.16:
+      macvlan_interface: eth0
+      macvlan_ip_range: "192.168.2.32/28"
+      dns_mode: master
+    192.168.2.17:
+      macvlan_interface: eth0
+      macvlan_ip_range: "192.168.2.48/28"
+      dns_mode: slave
+    192.168.2.18:
+      macvlan_interface: eth0
+      macvlan_ip_range: "192.168.2.64/28"
+  vars:
+    swarm_init_node_name: 192.168.2.16
+    subnet_servers_cidr: 192.168.2.0/24
+    subnet_servers_gateway: 192.168.2.1
+    subnet_servers_domain: "2.168.192.in-addr.arpa"
+    dns_forwarders:
+      - 1.1.1.1
+      - 1.0.1.0
+    dns_root_domain: homecentr.io
+    dns_master_ip: 192.168.2.32
+    dns_slave_ip: 192.168.2.48
+    volumes_root: /homecentr
+    volumes_owner: 'rancher'
+    volumes_group: 'docker'
