@@ -1,0 +1,12 @@
+$TTL 86400
+@ IN SOA ns1.{{ dns_root_domain }}. admin.{{ dns_root_domain }}. (
+991079290 ; serial
+28800 ; refresh
+14400 ; retry
+3600000 ; expire
+86400 ; default_ttl
+)
+IN NS ns1.homecentr.io.
+IN NS ns2.homecentr.io.
+{{ dns_master_ip }} IN PTR ns1.homecentr.io.
+{{ dns_slave_ip }} IN PTR ns2.homecentr.io.

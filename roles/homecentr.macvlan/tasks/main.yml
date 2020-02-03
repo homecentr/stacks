@@ -1,0 +1,11 @@
+---
+- name: Create Docker macvlan network
+  docker_network:
+    name: homecentr-macvlan
+    driver: macvlan
+    driver_options:
+      parent: "{{ macvlan_interface }}"
+    ipam_config:
+      - subnet: "{{ subnet_servers_cidr }}"
+        gateway: "{{ subnet_servers_gateway }}"
+        iprange: "{{ macvlan_ip_range }}"

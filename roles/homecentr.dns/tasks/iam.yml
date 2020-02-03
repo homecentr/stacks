@@ -1,0 +1,26 @@
+- name: Install binaries for IAM management
+  package:
+    name: shadow
+    state: present
+
+- name: Create group dns
+  group:
+    name: dns
+    gid: "{{ cnt_gid }}"
+    state: present
+
+- name: Create user dns
+  user:
+    name: dns
+    uid: "{{ cnt_uid }}"
+    group: dns
+    groups:
+      - dns
+    state: present
+
+- name: Add executing user to dns group
+  user:
+    name: "{{ ansible_user }}"
+    append: true
+    groups:
+      - dns

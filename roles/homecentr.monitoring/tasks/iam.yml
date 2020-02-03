@@ -1,0 +1,26 @@
+- name: Install binaries for IAM management
+  package:
+    name: shadow
+    state: present
+
+- name: Create group monitoring
+  group:
+    name: monitoring
+    gid: "{{ monitoring_gid }}"
+    state: present
+
+- name: Create user monitoring
+  user:
+    name: monitoring
+    uid: "{{ monitoring_uid }}"
+    group: monitoring
+    groups:
+      - monitoring
+    state: present
+
+- name: Add executing user to monitoring group
+  user:
+    name: "{{ ansible_user }}"
+    append: true
+    groups:
+      - monitoring

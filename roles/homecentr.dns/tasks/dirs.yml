@@ -1,0 +1,15 @@
+- name: Create config volume directory
+  file:
+    path: "{{ volumes_root }}/homecentr-dns/config"
+    state: directory
+    owner: "{{ cnt_uid }}"
+    group: "{{ cnt_gid }}"
+    mode: '0750'
+
+- name: Create stack directory
+  file:
+    path: "{{ volumes_root }}/homecentr-dns/stack"
+    state: directory
+    owner: "{{ cnt_uid }}"
+    group: "{{ cnt_gid }}"
+    mode: '0750'

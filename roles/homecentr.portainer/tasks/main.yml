@@ -1,0 +1,9 @@
+- include_tasks: iam.yml
+
+- name: Portainer stack
+  run_once: true
+  docker_stack:
+    prune: yes
+    name: homecentr-portainer
+    compose:
+      - "{{ lookup('template', 'docker-compose.yml.j2') | from_yaml }}"

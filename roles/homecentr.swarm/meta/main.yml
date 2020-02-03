@@ -1,0 +1,16 @@
+galaxy_info:
+  role_name: swarm
+  author: Lukas Holota
+  description: Sets up Docker Swarm cluster
+  company: HomeCentr
+
+  license: MIT
+
+  min_ansible_version: 2.7
+
+  galaxy_tags:
+    - Docker
+    - Swarm
+    - HomeCentr
+
+  dependencies: []

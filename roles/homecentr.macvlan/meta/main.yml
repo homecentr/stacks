@@ -1,0 +1,16 @@
+galaxy_info:
+  role_name: macvlan
+  author: Lukas Holota
+  description: "Sets up local macvlan on each node so that service which require direct exposure can be deployed"
+  company: HomeCentr
+
+  license: MIT
+
+  min_ansible_version: 2.7
+
+  galaxy_tags:
+    - Docker
+    - Macvlan
+    - HomeCentr
+
+  dependencies: []

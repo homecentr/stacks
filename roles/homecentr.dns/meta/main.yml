@@ -1,0 +1,17 @@
+galaxy_info:
+  role_name: dns
+  author: Lukas Holota
+  description: Sets up BIND based DNS containers
+  company: HomeCentr
+
+  license: MIT
+
+  min_ansible_version: 2.7
+
+  galaxy_tags:
+    - Docker
+    - Swarm
+    - HomeCentr
+
+  dependencies:
+    - homecentr.macvlan

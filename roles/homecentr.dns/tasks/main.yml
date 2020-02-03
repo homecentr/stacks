@@ -1,0 +1,14 @@
+- name: "Create users & groups"
+  include_tasks: iam.yml
+
+- name: "Create Directory structure"
+  include_tasks: dirs.yml
+  when: dns_mode is defined
+
+- name: "Create Docker configs"
+  include_tasks: configs.yml
+  when: dns_mode is defined
+
+- name: "Create Docker compose stack"
+  include_tasks: docker.yml
+  when: dns_mode is defined and (dns_mode == "master" or dns_mode == "slave")

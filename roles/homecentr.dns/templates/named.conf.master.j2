@@ -1,0 +1,32 @@
+acl "trusted" {
+  {{ subnet_servers_cidr }};
+  // TODO: Add home network cidr
+};
+
+options {
+        directory "/config";
+
+        recursion yes;
+        allow-recursion { any; };
+        listen-on { any; };
+        allow-transfer { {{ dns_slave_ip }}; };
+
+        notify yes;
+        also-notify { {{ dns_slave_ip }}; };
+
+        forwarders {
+                {% for forwarder in dns_forwarders %}{{ forwarder }};{% endfor %}
+        };
+};
+
+// Root zone
+zone "{{ dns_root_domain }}" {
+        type master;
+        file "root.zone";
+};
+
+// Servers subnet reverse zone
+zone "{{ subnet_servers_domain }}.in-addr.arpa" {
+        type master;
+        file "servers_reverse.zone";
+};

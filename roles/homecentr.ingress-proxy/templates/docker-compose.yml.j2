@@ -1,0 +1,21 @@
+version: "3.7"
+services:
+  proxy:
+    image: homecentr/nginx:latest
+    user: "{{ cnt_uid }}:{{ cnt_gid }}"
+    deploy:
+      mode: global
+    ports:
+      - "80:80/tcp"
+      - "443:443/tcp"
+    configs:
+      - source: nginx_conf
+        target: /etc/nginx/conf.d/default.conf
+
+configs:
+  nginx_conf:
+    file: "/tmp/homecentr-ingress-nginx.conf"
+
+networks:
+  default:
+    name: homecentr-ingress-proxy-default

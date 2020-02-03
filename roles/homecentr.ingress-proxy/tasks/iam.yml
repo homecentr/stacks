@@ -1,0 +1,26 @@
+- name: Install binaries for IAM management
+  package:
+    name: shadow
+    state: present
+
+- name: Create group ingress_proxy
+  group:
+    name: ingress_proxy
+    gid: "{{ cnt_gid }}"
+    state: present
+
+- name: Create user ingress_proxy
+  user:
+    name: ingress_proxy
+    uid: "{{ cnt_uid }}"
+    group: ingress_proxy
+    groups:
+      - ingress_proxy
+    state: present
+
+- name: Add executing user to ingress_proxy group
+  user:
+    name: "{{ ansible_user }}"
+    append: true
+    groups:
+      - ingress_proxy

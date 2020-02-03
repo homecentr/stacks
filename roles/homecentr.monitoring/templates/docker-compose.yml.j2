@@ -1,0 +1,51 @@
+version: '3.7'
+services:
+  prometheus:
+    image: homecentr/prometheus
+    environment:
+      PUID: "{{ monitoring_uid }}"
+      PGID: "{{ monitoring_gid }}"
+    # volumes: # TODO: Storage
+    networks:
+      - monitoring
+    ports:
+      - 9090:9090
+    configs:
+      - source: prometheus
+        target: /etc/prometheus/prometheus.yml
+        uid: "{{ monitoring_uid }}"
+        gid: "{{ monitoring_gid }}"
+        mode: 0440
+    deploy:
+      mode: replicated
+      replicas: 1
+
+  node-exporter:
+    image: homecentr/prometheus-node-exporter
+    networks:
+      - monitoring
+    environment:
+      NODE_ID={% raw %}{{.Node.ID}}{% endraw %}
+      NODE_EXPORTER_ARGS: "--path.sysfs=/host/sys --path.procfs=/host/proc --collector.textfile.directory=/etc/node-exporter/ --collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc)($$|/) --no-collector.ipvs"
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+      - /etc/hostname:/etc/nodename
+    deploy:
+      mode: global
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 64M    
+
+configs:
+  prometheus:
+    name: homecentr-prometheus
+    external: true
+
+networks:
+  monitoring:
+    driver: overlay
+    attachable: true

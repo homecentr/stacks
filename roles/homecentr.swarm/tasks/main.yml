@@ -1,0 +1,15 @@
+---
+- name: "Initialize cluster"
+  docker_swarm:
+    state: present
+    advertise_addr: "{{ swarm_init_node_name }}"
+  when: swarm_init_node_name == inventory_hostname
+  register: swarm_info
+
+- name: "Join cluster"
+  docker_swarm:
+    state: join
+    advertise_addr: "{{ swarm_init_node_name }}"
+    remote_addrs: "{{ swarm_init_node_name }}"
+    join_token: "{{ hostvars[swarm_init_node_name].swarm_info.swarm_facts.JoinTokens.Manager }}"
+  when: swarm_init_node_name != inventory_hostname

@@ -1,0 +1,14 @@
+galaxy_info:
+  role_name: pip
+  author: Lukas Holota
+  description: Installs pip dependencies required for other HomeCentr roles
+  company: HomeCentr
+
+  license: MIT
+
+  min_ansible_version: 2.7
+
+  galaxy_tags:
+    - Docker
+    - Swarm
+    - HomeCentr

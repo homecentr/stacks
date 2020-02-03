@@ -25,3 +25,5 @@ all:
     volumes_root: /homecentr
     volumes_owner: 'rancher'
     volumes_group: 'docker'
+    pip_install_packages:
+      - jsondiff

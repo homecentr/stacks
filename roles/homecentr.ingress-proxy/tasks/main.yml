@@ -1,0 +1,22 @@
+- include_tasks: iam.yml
+
+- name: Create config tmp file
+  run_once: true
+  template:
+    src: "{{ role_path }}/templates/nginx.conf.j2"
+    dest: "/tmp/homecentr-ingress-nginx.conf"
+    force: yes
+
+- name: Ingress proxy stack
+  run_once: true
+  docker_stack:
+    prune: yes
+    name: homecentr-ingress-proxy
+    compose:
+      - "{{ lookup('template', 'docker-compose.yml.j2') | from_yaml }}"
+
+- name: Remove temp file  
+  run_once: true
+  file:
+    path: "/tmp/homecentr-ingress-nginx.conf"
+    state: absent

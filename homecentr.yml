@@ -3,7 +3,11 @@
   remote_user: rancher
   become: yes
   roles:
-    #- { role: ../ansible-role-swarm }
-    #- { role: ../ansible-role-macvlan }
-    - { role: ../ansible-role-dns, cnt_uid: 2001, cnt_gid: 2001 }
-    #- { role: ../homecentr-monitoring } # Grafana, Prometheus etc.
+    #- { role: homecentr.swarm }
+    #- { role: homecentr.macvlan }
+    #- { role: homecentr.dns, cnt_uid: 2001, cnt_gid: 2001 }
+    #- { role: homecentr.portainer, cnt_uid: 2003, cnt_gid: 2003 }
+    - { role: homecentr.monitoring, monitoring_uid: 2004, monitoring_gid: 2004 }
+
+
+    #- { role: homecentr.ingress-proxy, cnt_uid: 2002, cnt_gid: 2002 }
