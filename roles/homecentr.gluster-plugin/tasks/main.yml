@@ -1,0 +1,30 @@
+- name: "Check if plugin is already installed"
+  command: 'docker plugin ls --filter capability=volumedriver --format {% raw %}{{.Name}}{% endraw %}'
+  register: check_plugin
+  changed_when: plugin_name not in check_plugin.stdout
+
+- name: "Install plugin"
+  command: "docker plugin install --alias {{ plugin_name }} trajano/glusterfs-volume-plugin --grant-all-permissions --disable"
+  when: check_plugin.changed
+
+- name: "Define the plugin configuration value"
+  set_fact:
+    plugin_servers: 'SERVERS={{ ansible_play_hosts_all | join(",") }}'
+
+- name: "Check if plugin is configured"
+  command: "docker plugin inspect {{ plugin_name }} --format {% raw %}{{.Settings.Env}}{% endraw %}"
+  register: check_plugin_config
+  changed_when: plugin_servers not in check_plugin_config.stdout
+
+- name: "Configure plugin"
+  command: 'docker plugin set {{ plugin_name }} {{ plugin_servers }}'
+  when: check_plugin_config.changed
+
+- name: "Check if plugin is enabled"
+  command: '{% raw %}docker plugin ls --filter capability=volumedriver --filter enabled=true --format {{.Name}}{% endraw %}'
+  register: check_plugin_enabled
+  changed_when: plugin_name not in check_plugin_enabled.stdout
+
+- name: "Enable plugin"
+  command: "docker plugin enable {{ plugin_name }}"
+  when: check_plugin_enabled.changed
