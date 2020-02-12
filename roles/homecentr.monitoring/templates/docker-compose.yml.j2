@@ -38,12 +38,32 @@ services:
         limits:
           memory: 128M
         reservations:
-          memory: 64M    
+          memory: 64M
+
+  cadvisor:
+    image: homecentr/cadvisor
+    environment:
+      CADVISOR_ARGS: "-logtostderr -docker_only"
+    networks:
+      - monitoring
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /:/rootfs:ro
+      - /var/run:/var/run
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    deploy:
+      mode: global
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 64M
 
 configs:
   prometheus:
     name: homecentr-prometheus
-    external: true
+    file: /tmp/prometheus.yml
 
 networks:
   monitoring:

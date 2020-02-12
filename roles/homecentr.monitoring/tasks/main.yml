@@ -2,11 +2,9 @@
 
 - name: Create Prometheus Docker config
   run_once: true
-  docker_config:
-    name: homecentr-prometheus
-    data: "{{ lookup('template', 'prometheus.yml.j2') | b64encode }}"
-    data_is_b64: true
-    state: present
+  template:
+    src: prometheus.yml.j2
+    dest: /tmp/prometheus.yml
 
 - name: Monitoring stack
   run_once: true
@@ -15,3 +13,9 @@
     name: homecentr-monitoring
     compose:
       - "{{ lookup('template', 'docker-compose.yml.j2') | from_yaml }}"
+
+- name: Remove temporary config file
+  run_once: true
+  file:
+    path: /tmp/prometheus.yml
+    state: absent  
