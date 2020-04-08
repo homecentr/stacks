@@ -1,7 +1,7 @@
 galaxy_info:
-  role_name: pip
+  role_name: monitoring
   author: Lukas Holota
-  description: Installs pip dependencies required for other HomeCentr roles
+  description: Sets up the Prometheus/Grafana based monitoring Docker swarm stack
   company: HomeCentr
 
   license: MIT
@@ -13,4 +13,5 @@ galaxy_info:
     - Swarm
     - HomeCentr
 
-dependencies: []
+dependencies:
+  - homecentr.swarm

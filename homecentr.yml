@@ -3,12 +3,14 @@
   remote_user: rancher
   become: yes
   roles:
-    #- { role: homecentr.swarm }
-    #- { role: homecentr.macvlan }
-    - { role: homecentr.gluster-plugin }
-    #- { role: homecentr.dns, cnt_uid: 2001, cnt_gid: 2001 }
-    #- { role: homecentr.portainer, cnt_uid: 2003, cnt_gid: 2003 }
+    - { role: homecentr.portainer, cnt_uid: 2003, cnt_gid: 2003 }
     #- { role: homecentr.monitoring, monitoring_uid: 2004, monitoring_gid: 2004 }
-
-
+    #- { role: homecentr.macvlan }
+    #- { role: homecentr.gluster, volume_name: "cfg", brick_root_path: "/data/gfs" }
+    #- { role: homecentr.gluster-plugin }
+    #- { role: homecentr.swarm-local-network-connector, cnt_uid: 2005, cnt_gid: 2005 }
+    #- { role: homecentr.dns, cnt_uid: 2001, cnt_gid: 2001 }
+    
+    
+    
     #- { role: homecentr.ingress-proxy, cnt_uid: 2002, cnt_gid: 2002 }

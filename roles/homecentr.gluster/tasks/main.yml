@@ -1,0 +1,53 @@
+---
+- name: Probe cluster nodes
+  run_once: true
+  gluster_peer:
+    state: present
+    nodes: "{{ play_hosts }}"
+
+- name: Create volume bricks directories
+  file:
+    path: "{{ brick_root_path }}/{{ volume_name }}/b1"
+    state: directory
+    mode: 0771
+    owner: root
+    group: root
+
+- name: "Check if volume already exists"
+  run_once: true
+  command: 'gluster volume list'
+  register: check_volume
+  changed_when: volume_name not in check_volume.stdout
+
+- name: "Create volume"
+  run_once: true
+  command: "gluster volume create {{ volume_name }} replica {{ play_hosts | count }} {{ play_hosts | map('regex_replace', '^(.*)$', '\\1:'+ brick_root_path +'/'+ volume_name +'/b1') | join(' ') }}"
+  when: check_volume.changed
+
+- name: "Check if volume already started"
+  run_once: true
+  command: 'gluster volume info {{ volume_name }}'
+  register: check_volume_started
+  ignore_errors: yes
+  changed_when: "'not started' in check_volume_started.stderr"
+
+- name: "Start volume"
+  run_once: true
+  command: "gluster volume start {{ volume_name }}"
+  when: check_volume_started.changed
+
+- name: Create volume bricks directories
+  file:
+    path: "{{ mount_dir }}"
+    state: directory
+    mode: 0771
+    owner: root
+    group: root
+
+- name: "Mount volume"
+  mount:
+    name: "{{ mount_dir }}"
+    src: "{{ inventory_hostname }}:/{{ volume_name }}"
+    fstype: glusterfs
+    opts: "defaults,_netdev"
+    state: mounted

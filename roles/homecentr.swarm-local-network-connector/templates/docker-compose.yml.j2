@@ -1,0 +1,12 @@
+version: '3.7'
+services:
+  agent:
+    image: homecentr/swarm-local-network-connector:1.1.0
+    environment:
+      PUID: "{{ cnt_uid }}"
+      PGID: "{{ cnt_gid }}"
+      LOG_LEVEL: "debug"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    deploy:
+      mode: global

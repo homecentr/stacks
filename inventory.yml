@@ -1,14 +1,15 @@
 all:
   hosts:
     192.168.2.16:
+      hostname: node1
       macvlan_interface: eth0
       macvlan_ip_range: "192.168.2.32/28"
-      dns_mode: master
     192.168.2.17:
+      hostname: node2
       macvlan_interface: eth0
       macvlan_ip_range: "192.168.2.48/28"
-      dns_mode: slave
     192.168.2.18:
+      hostname: node3
       macvlan_interface: eth0
       macvlan_ip_range: "192.168.2.64/28"
   vars:

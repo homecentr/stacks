@@ -1,0 +1,19 @@
+galaxy_info:
+  role_name: portainer
+  author: Lukas Holota
+  description: Sets up Portainer Docker Swarm stack
+  company: HomeCentr
+
+  license: MIT
+
+  min_ansible_version: 2.7
+
+  galaxy_tags:
+    - Docker
+    - Swarm
+    - HomeCentr
+    - Portainer
+
+dependencies:
+  - { role: "homecentr.pip" }
+  - { role: "homecentr.swarm" }

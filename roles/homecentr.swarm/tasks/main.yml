@@ -9,7 +9,7 @@
 - name: "Join cluster"
   docker_swarm:
     state: join
-    advertise_addr: "{{ swarm_init_node_name }}"
+    advertise_addr: "{{ inventory_hostname }}"
     remote_addrs: "{{ swarm_init_node_name }}"
     join_token: "{{ hostvars[swarm_init_node_name].swarm_info.swarm_facts.JoinTokens.Manager }}"
   when: swarm_init_node_name != inventory_hostname

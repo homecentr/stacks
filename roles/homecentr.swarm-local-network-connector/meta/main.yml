@@ -1,7 +1,7 @@
 galaxy_info:
-  role_name: pip
+  role_name: swarm-local-network-connector
   author: Lukas Holota
-  description: Installs pip dependencies required for other HomeCentr roles
+  description: Sets up the Swarm Local Network Connector Docker Swarm stack
   company: HomeCentr
 
   license: MIT
@@ -13,4 +13,5 @@ galaxy_info:
     - Swarm
     - HomeCentr
 
-dependencies: []
+dependencies:
+  - role: homecentr.swarm

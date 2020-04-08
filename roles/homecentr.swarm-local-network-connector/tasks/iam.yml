@@ -1,0 +1,33 @@
+- name: Install binaries for IAM management
+  package:
+    name: shadow
+    state: present
+
+- name: Create group swarm_local_network_connector
+  group:
+    name: swarm_local_network_connector
+    gid: "{{ cnt_gid }}"
+    state: present
+
+- name: Create user swarm_local_network_connector
+  user:
+    name: swarm_local_network_connector
+    uid: "{{ cnt_uid }}"
+    group: swarm_local_network_connector
+    groups:
+      - swarm_local_network_connector
+    state: present
+
+- name: Add swarm_local_network_connector to Docker group
+  user:
+    name: swarm_local_network_connector
+    append: true
+    groups:
+      - docker
+
+- name: Add executing user to swarm_local_network_connector group
+  user:
+    name: "{{ ansible_user }}"
+    append: true
+    groups:
+      - swarm_local_network_connector
