@@ -1,0 +1,21 @@
+galaxy_info:
+  role_name: swarm
+  author: Lukas Holota
+  description: Server initialization automation after fresh installation to make it ready for HomeCentr services
+  company: HomeCentr
+
+  license: MIT
+
+  min_ansible_version: 2.7
+
+  platforms:
+   - name: CentOS
+     versions:
+      - 8
+      - 8.1
+
+  galaxy_tags:
+    - CentOS
+    - HomeCentr
+
+dependencies: []

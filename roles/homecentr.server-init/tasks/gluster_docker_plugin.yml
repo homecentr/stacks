@@ -4,7 +4,7 @@
   changed_when: plugin_alias not in check_plugin.stdout
 
 - name: "Install plugin"
-  command: "docker plugin install --alias {{ plugin_alias }} {{ plugin_tag }} --grant-all-permissions --disable"
+  command: "docker plugin install --alias {{ plugin_alias }} {{ gluster_docker_plugin_tag }} --grant-all-permissions --disable"
   when: check_plugin.changed
 
 - name: "Define the plugin configuration value"

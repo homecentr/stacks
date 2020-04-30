@@ -7,6 +7,7 @@ services:
       PGID: "{{ cnt_gid }}"
       LOG_LEVEL: "debug"
       AGENT_CLUSTER_ADDR: tasks.agent
+      AGENT_SECRET: "some-very-secure-value"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /var/lib/docker/volumes:/var/lib/docker/volumes
@@ -14,7 +15,6 @@ services:
       - agent_network
     deploy:
       mode: global
-      endpoint_mode: dnsrr
       
   portainer:
     image: homecentr/portainer
@@ -22,6 +22,7 @@ services:
       PUID: "{{ cnt_uid }}"
       PGID: "{{ cnt_gid }}"
       PORTAINER_ARGS: "-H tcp://tasks.agent:9001 --tlsskipverify --no-auth"
+      AGENT_SECRET: "some-very-secure-value"
     ports:
       - "9000:9000"
       - "8000:8000"

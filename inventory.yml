@@ -26,5 +26,12 @@ all:
     volumes_root: /homecentr
     volumes_owner: 'rancher'
     volumes_group: 'docker'
-    pip_install_packages:
-      - jsondiff
+    macvlan_network_name: homecentr-macvlan
+    gluster_config_volume_name: cfg
+    # Server init
+    security_ssh_password_authentication: "no"
+    security_ssh_permit_root_login: "no"
+    security_ssh_usedns: "no"
+    security_ssh_permit_empty_password: "no"
+    security_autoupdate_enabled: false
+    security_fail2ban_enabled: true

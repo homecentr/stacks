@@ -13,5 +13,8 @@ galaxy_info:
     - Swarm
     - HomeCentr
 
-  dependencies:
-    - homecentr.macvlan
+dependencies:
+  - homecentr.macvlan
+  - homecentr.gluster-volumes
+  - homecentr.gluster-plugin
+  - homecentr.swarm-local-network-connector

@@ -1,0 +1,2 @@
+el_version: 8.1
+gluster_docker_plugin_tag: homecentr/gluster-volume-plugin:1.0.0

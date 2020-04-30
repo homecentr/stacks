@@ -1,0 +1,50 @@
+# - name: "Install EPEL repo"
+#   include_role:
+#       name: geerlingguy.repo-epel
+
+# - name: "Configure yum to only keep one old kernel"
+#   lineinfile:
+#     path: /etc/yum.conf
+#     regexp: "^installonly_limit=(.*)"
+#     line: "installonly_limit=2"
+
+# - name: "Update system"
+#   include_tasks: update.yml
+
+# - name: Install time sync service
+#   include_tasks: "chrony.yml"
+
+# - name: "Install JumpCloud agent"
+#   include_tasks: "jumpcloud.yml"
+
+- name: "Install Lynis"
+  include_tasks: lynis.yml
+
+# - name: "Install ZFS"
+#   include_tasks: zfs.yml
+
+# - name: "Install PIP"
+#   include_role:
+#     name: geerlingguy.pip
+#   vars:
+#     pip_package: python3-pip
+#     pip_install_packages:
+#       - name: docker
+#       - name: jsondiff
+
+# - name: "Install Docker"
+#   include_role:
+#     name: geerlingguy.docker
+#   vars:
+#     docker_edition: ce
+#     docker_install_compose: true
+
+- name: "Install GlusterFS"
+  include_tasks: gluster.yml
+
+- name: "Install GlusterFS Docker plugin"
+  include_tasks: gluster_docker_plugin.yml
+
+# - name: "Configure SSH security"
+#   include_role:
+#       name: geerlingguy.security

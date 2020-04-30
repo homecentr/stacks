@@ -1,0 +1,6 @@
+---
+- hosts: all
+  remote_user: lholota
+  become: yes
+  roles:
+    - { role: homecentr.server-init }

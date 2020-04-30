@@ -1,0 +1,37 @@
+---
+- name: Probe cluster nodes
+  run_once: true
+  gluster_peer:
+    state: present
+    nodes: "{{ play_hosts }}"
+
+- name: Create config volume bricks directories
+  file:
+    path: "{{ brick_root_path }}/{{ gluster_config_volume_name }}/b1"
+    state: directory
+    mode: 0771
+    owner: root
+    group: root
+
+- name: "Check if config volume already exists"
+  run_once: true
+  command: 'gluster volume list'
+  register: check_volume
+  changed_when: gluster_config_volume_name not in check_volume.stdout
+
+- name: "Create config volume"
+  run_once: true
+  command: "gluster volume create {{ gluster_config_volume_name }} replica {{ play_hosts | count }} {{ play_hosts | map('regex_replace', '^(.*)$', '\\1:'+ brick_root_path +'/'+ gluster_config_volume_name +'/b1') | join(' ') }}"
+  when: check_volume.changed
+
+- name: "Check if config volume already started"
+  run_once: true
+  command: 'gluster volume info {{ gluster_config_volume_name }}'
+  register: check_volume_started
+  ignore_errors: yes
+  changed_when: "'not started' in check_volume_started.stderr"
+
+- name: "Start config volume"
+  run_once: true
+  command: "gluster volume start {{ gluster_config_volume_name }}"
+  when: check_volume_started.changed

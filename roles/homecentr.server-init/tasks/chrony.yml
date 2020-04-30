@@ -1,0 +1,12 @@
+- name: "Install chrony yum package"
+  yum:
+    name: chrony
+    state: present
+  
+- name: "Start service"  
+  service:
+    name: chronyd
+    state: started  
+
+- name: "Force immediate time sync"  
+  shell: "chronyc makestep"

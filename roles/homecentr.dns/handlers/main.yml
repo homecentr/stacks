@@ -1,2 +1,2 @@
-- name: Start Nginx
-  service: "docker restart homecentr-dns"
+- name: Restart DNS Master
+  service: "docker service update --force homecentr-dns.master"

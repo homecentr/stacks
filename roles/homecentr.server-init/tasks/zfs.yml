@@ -1,0 +1,41 @@
+- name: "Add ZFS repo"
+  yum:
+    name: "http://download.zfsonlinux.org/epel/zfs-release.el{{ el_version | replace('.', '_') }}.noarch.rpm"
+    state: installed
+
+- name: "Get kernel version"  
+  shell: "uname -r"
+  register: kernel_version
+
+- name: "Install kernel-devel package"
+  yum:
+    name: "kernel-devel-{{ kernel_version.stdout }}"
+    state: present
+
+- name: "Install ZFS package"
+  yum:
+    name: zfs
+    state: present
+    disablerepo: "zfs" # Disable DKMS repo
+    enablerepo: "zfs-kmod"
+  register: zfs_installed
+
+- name: "Enable loading zfs modules on boot"
+  copy:
+    dest: /etc/modules-load.d/zfs.conf
+    content: zfs
+    owner: root
+    group: root
+    mode: 0644
+  register: zfs_installed  
+
+- name: "Rebooting machine due to zfs installation..."
+  shell: shutdown -r now "Reboot required for zfs installation"
+  async: 0
+  poll: 0
+  ignore_errors: true
+  register: zfs_rebooting
+
+- name: "Wait for the thing to reboot..."
+  pause: seconds=80
+  when: zfs_rebooting.changed

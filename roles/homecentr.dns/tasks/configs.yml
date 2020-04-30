@@ -1,4 +1,5 @@
 - name: Named.conf
+  run_once: true
   template:
     src: "{{ role_path }}/templates/named.conf.{{ dns_mode }}.j2"
     dest: "{{ volumes_root }}/homecentr-dns/config/named.conf"
@@ -6,9 +7,10 @@
     group: "{{ cnt_gid }}"
     mode: '0640'
     force: yes
-  notify: restart  
+  notify: restart_master
 
 - name: Root zone
+  run_once: true
   template:
     src: "{{ role_path }}/templates/root.zone.master.j2"
     dest: "{{ volumes_root }}/homecentr-dns/config/root.zone"
@@ -16,10 +18,10 @@
     group: "{{ cnt_gid }}"
     mode: '0640'
     force: yes
-  when: dns_mode == "master"
-  notify: restart
+  notify: restart_master
 
 - name: Servers reverse zone
+  run_once: true
   template:
     src: "{{ role_path }}/templates/root.zone.master.j2"
     dest: "{{ volumes_root }}/homecentr-dns/config/servers_reverse.zone"
@@ -27,5 +29,4 @@
     group: "{{ cnt_gid }}"
     mode: '0640'
     force: yes
-  when: dns_mode == "master"
   notify: restart

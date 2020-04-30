@@ -1,20 +1,20 @@
 version: "3.7"
 services:
-  dns:
+  master:
     image: homecentr/dns:latest
     name: homecentr-dns
     user: "{{ cnt_uid }}:{{ cnt_gid }}"
+    labels:
+      - io.homecentr.local-networks: "[{ \"Network\": \"{{ macvlan_network_name }}\", \"Config\": { \"IPAMConfig\": { \"IPV4Address\": \"{{ dns_master_ip }}\" } } }]"
     dns:
-      - 127.0.0.1 # important for health check    
-    restart: unless-stopped
+      - 127.0.0.1 # required for health check    
     volumes:
       # the directory MUST be writable, BIND9 writes jnl files next to the configuration
-      - "{{ volumes_root }}/homecentr-dns/config:/config:rw"
-    networks:
-      macvlan:
-        ipv4_address: {{ dns_master_ip if dns_mode == "master" else dns_slave_ip }}
+      - "master_config:/config:rw"
 
-networks:
-  macvlan:
-    name: "homecentr-macvlan"
-    external: true
+# TBA: DNS Slave service
+
+volumes:
+  master_config:
+    driver: glusterfs
+    name: "{{ gluster_config_volume_name }}/dns/master"

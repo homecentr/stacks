@@ -1,0 +1,4 @@
+- name: "Install Lynis"
+  yum:
+    name: lynis
+    state: present

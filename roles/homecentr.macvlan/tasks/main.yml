@@ -1,7 +1,7 @@
 ---
 - name: Create Docker macvlan network
   docker_network:
-    name: homecentr-macvlan
+    name: "{{ macvlan_network_name }}"
     driver: macvlan
     driver_options:
       parent: "{{ macvlan_interface }}"
