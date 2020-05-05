@@ -17,3 +17,9 @@
   service:
     name: glusterd
     state: started
+
+- name: Probe glusterfs nodes
+  run_once: true
+  gluster_peer:
+    state: present
+    nodes: "{{ play_hosts }}"

@@ -13,3 +13,9 @@
     remote_addrs: "{{ swarm_init_node_name }}"
     join_token: "{{ hostvars[swarm_init_node_name].swarm_info.swarm_facts.JoinTokens.Manager }}"
   when: swarm_init_node_name != inventory_hostname
+
+- name: "Set node labels"
+  docker_node:
+    hostname: "{{ hostname }}"
+    labels: "{{ docker_node_labels }}"
+  when: docker_node_labels is defined

@@ -13,6 +13,7 @@ all:
       macvlan_interface: eth0
       macvlan_ip_range: "192.168.2.64/28"
   vars:
+    docker_group_gid: 1099
     swarm_init_node_name: 192.168.2.16
     subnet_servers_cidr: 192.168.2.0/24
     subnet_servers_gateway: 192.168.2.1

@@ -1,0 +1,2 @@
+portainer_docker_image_tag: "homecentr/portainer:latest"
+portainer_agent_docker_image_tag: "homecentr/portainer-agent:latest"

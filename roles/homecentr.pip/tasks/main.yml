@@ -1,8 +1,0 @@
-- name: Ensure pip is installed
-  package:
-    name: py-pip
-    state: present
-
-- name: Install pip modules
-  pip:
-    name: ['jsondiff']

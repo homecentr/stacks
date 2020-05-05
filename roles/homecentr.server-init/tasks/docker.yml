@@ -1,0 +1,11 @@
+- name: "Install Docker"
+  include_role:
+    name: geerlingguy.docker
+  vars:
+    docker_edition: ce
+    docker_install_compose: true
+
+- name: "Unify Docker group GID across the cluster"
+  group:
+    gid: "{{ docker_group_gid }}"
+    name: "docker"

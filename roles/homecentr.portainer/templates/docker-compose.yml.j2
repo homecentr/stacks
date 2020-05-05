@@ -1,7 +1,7 @@
-version: '3.2'
+version: '3.7'
 services:
   agent:
-    image: homecentr/portainer-agent
+    image: {{ portainer_agent_docker_image_tag }}
     environment:
       PUID: "{{ cnt_uid }}"
       PGID: "{{ cnt_gid }}"
@@ -17,15 +17,18 @@ services:
       mode: global
       
   portainer:
-    image: homecentr/portainer
+    image: {{ portainer_docker_image_tag }}
     environment:
       PUID: "{{ cnt_uid }}"
       PGID: "{{ cnt_gid }}"
       PORTAINER_ARGS: "-H tcp://tasks.agent:9001 --tlsskipverify --no-auth"
       AGENT_SECRET: "some-very-secure-value"
+      WAIT_FOR_NS_RECORD: "tasks.agent"
+      WAIT_FOR_NS_RECORD_TIMEOUT: 60
+    healthcheck:
+      start_period: "80s"    
     ports:
       - "9000:9000"
-      - "8000:8000"
     volumes:
       - portainer_data:/data
     networks:

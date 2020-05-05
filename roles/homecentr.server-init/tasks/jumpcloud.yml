@@ -1,11 +1,12 @@
-- name: Install curl package
-  action: yum name='curl' state=installed
+- name: "Install curl package"
+  yum:
+    name: 'curl'
+    state: installed
 
-- name: Check if JumpCloud is already installed
+- name: "Check if JumpCloud is already installed"
   shell: "[ -d /opt/jc ] && echo 'Found' || echo ''"
   register: jc_installed
 
-- name: Install JumpCloud agent
-  shell: "curl --header 'x-connect-key: {{ jumpcloud_connect_key }}' https://kickstart.jumpcloud.com/Kickstart | sudo bash"
-  warn: false
-  when: "not jc_installed.stdout"
+- name: "Install JumpCloud agent"
+  shell: "curl --header 'x-connect-key: {{ jumpcloud_connect_key }}' https://kickstart.jumpcloud.com/Kickstart | bash"
+  when: jc_installed.stdout == ""

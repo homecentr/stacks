@@ -1,0 +1,6 @@
+- name: Disable firewalld
+  systemd: name=firewalld enabled=no
+
+- name: Stop firewalld if running
+  systemd: name=firewalld state=stopped
+  ignore_errors: yes

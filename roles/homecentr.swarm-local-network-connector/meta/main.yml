@@ -13,5 +13,4 @@ galaxy_info:
     - Swarm
     - HomeCentr
 
-dependencies:
-  - role: "homecentr.swarm"
+dependencies: []

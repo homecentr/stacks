@@ -1,33 +1,6 @@
-- name: Install binaries for IAM management
-  package:
-    name: shadow
-    state: present
-
-- name: Create group portainer
-  group:
-    name: portainer
-    gid: "{{ cnt_gid }}"
-    state: present
-
 - name: Create user portainer
   user:
     name: portainer
     uid: "{{ cnt_uid }}"
-    group: portainer
-    groups:
-      - portainer
+    group: "{{ cnt_gid }}"
     state: present
-
-- name: Add portainer to Docker group
-  user:
-    name: portainer
-    append: true
-    groups:
-      - docker
-
-- name: Add executing user to portainer group
-  user:
-    name: "{{ ansible_user }}"
-    append: true
-    groups:
-      - portainer

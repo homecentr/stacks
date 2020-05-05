@@ -21,7 +21,7 @@
 
 - name: "Create config volume"
   run_once: true
-  command: "gluster volume create {{ gluster_config_volume_name }} replica {{ play_hosts | count }} {{ play_hosts | map('regex_replace', '^(.*)$', '\\1:'+ brick_root_path +'/'+ gluster_config_volume_name +'/b1') | join(' ') }}"
+  command: "gluster volume create {{ gluster_config_volume_name }} replica {{ play_hosts | count }} {{ play_hosts | map('regex_replace', '^(.*)$', '\\1:'+ brick_root_path +'/'+ gluster_config_volume_name +'/b1') | join(' ') }}{% if gluster_config_force %} force{% endif %}"
   when: check_volume.changed
 
 - name: "Check if config volume already started"

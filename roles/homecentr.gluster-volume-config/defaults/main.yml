@@ -1,0 +1,2 @@
+gluster_config_volume_name: "cfg"
+gluster_config_force: false
