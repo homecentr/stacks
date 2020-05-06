@@ -29,9 +29,17 @@
   command: 'gluster volume info {{ gluster_config_volume_name }}'
   register: check_volume_started
   ignore_errors: yes
-  changed_when: "'not started' in check_volume_started.stderr"
+  changed_when: "'Status: Started' not in check_volume_started.stdout"
 
 - name: "Start config volume"
   run_once: true
   command: "gluster volume start {{ gluster_config_volume_name }}"
   when: check_volume_started.changed
+
+- name: Ensure Gluster volume is mounted.
+  mount:
+    src: "{{ inventory_hostname }}:/{{ gluster_config_volume_name }}"
+    path: "/mnt/gfs/{{ gluster_config_volume_name }}"
+    fstype: glusterfs
+    opts: "defaults,_netdev"
+    state: mounted
