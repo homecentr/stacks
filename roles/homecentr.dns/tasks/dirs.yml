@@ -1,15 +1,17 @@
-- name: Create config volume directory
+- name: Create master config directory
+  run_once: true
   file:
-    path: "{{ volumes_root }}/homecentr-dns/config"
+    path: "{{ gluster_config_mount_path }}/dns/config/master"
     state: directory
     owner: "{{ cnt_uid }}"
     group: "{{ cnt_gid }}"
     mode: '0750'
 
-- name: Create stack directory
+- name: Create slave config directory
+  run_once: true
   file:
-    path: "{{ volumes_root }}/homecentr-dns/stack"
+    path: "{{ gluster_config_mount_path }}/dns/config/slave"
     state: directory
     owner: "{{ cnt_uid }}"
     group: "{{ cnt_gid }}"
-    mode: '0750'
+    mode: '0750'  

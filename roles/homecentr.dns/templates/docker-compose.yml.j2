@@ -2,19 +2,64 @@ version: "3.7"
 services:
   master:
     image: homecentr/dns:latest
-    name: homecentr-dns
-    user: "{{ cnt_uid }}:{{ cnt_gid }}"
+    networks:
+      internal:
+    environment:
+      PUID: "{{ cnt_uid }}"
+      PGID: "{{ cnt_gid }}"
     labels:
-      - io.homecentr.local-networks: "[{ \"Network\": \"{{ macvlan_network_name }}\", \"Config\": { \"IPAMConfig\": { \"IPV4Address\": \"{{ dns_master_ip }}\" } } }]"
+      io.homecentr.local-networks: "[{ \"Network\": \"{{ macvlan_network_name }}\", \"Config\": { \"IPAMConfig\": { \"IPV4Address\": \"{{ dns_master_ip }}\" } } }]"
     dns:
       - 127.0.0.1 # required for health check    
     volumes:
-      # the directory MUST be writable, BIND9 writes jnl files next to the configuration
       - "master_config:/config:rw"
 
-# TBA: DNS Slave service
+  master_exporter:
+    image: homecentr/dns-exporter:latest
+    ports:
+      - 9119:9119
+    networks:
+      internal:
+    environment:
+      EXPORTER_ARGS: "-bind.stats-url http://homecentr-dns_master:8888"
+      PUID: "{{ cnt_uid }}"
+      PGID: "{{ cnt_gid }}"
+
+  slave:
+    image: homecentr/dns:latest
+    networks:
+      internal:
+    environment:
+      PUID: "{{ cnt_uid }}"
+      PGID: "{{ cnt_gid }}"
+    labels:
+      io.homecentr.local-networks: "[{ \"Network\": \"{{ macvlan_network_name }}\", \"Config\": { \"IPAMConfig\": { \"IPV4Address\": \"{{ dns_slave_ip }}\" } } }]"
+    dns:
+      - 127.0.0.1 # required for health check    
+    volumes:
+      - "slave_config:/config:rw"
+
+  slave_exporter:
+    image: homecentr/dns-exporter:latest
+    ports:
+      - 9120:9119
+    networks:
+      internal:
+    environment:
+      EXPORTER_ARGS: "-bind.stats-url http://homecentr-dns_slave:8888"
+      PUID: "{{ cnt_uid }}"
+      PGID: "{{ cnt_gid }}"
+
+networks:
+  internal:
+    driver: overlay
+    attachable: true
 
 volumes:
   master_config:
     driver: glusterfs
-    name: "{{ gluster_config_volume_name }}/dns/master"
+    name: "{{ gluster_config_volume_name }}/dns/config/master"
+
+  slave_config:
+    driver: glusterfs
+    name: "{{ gluster_config_volume_name }}/dns/config/slave"

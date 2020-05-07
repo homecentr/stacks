@@ -1,8 +1,8 @@
-- name: Named.conf
+- name: Master - Named.conf
   run_once: true
   template:
-    src: "{{ role_path }}/templates/named.conf.{{ dns_mode }}.j2"
-    dest: "{{ volumes_root }}/homecentr-dns/config/named.conf"
+    src: "{{ role_path }}/templates/named.conf.master.j2"
+    dest: "{{ gluster_config_mount_path }}/dns/config/master/named.conf"
     owner: "{{ cnt_uid }}"
     group: "{{ cnt_gid }}"
     mode: '0640'
@@ -13,7 +13,29 @@
   run_once: true
   template:
     src: "{{ role_path }}/templates/root.zone.master.j2"
-    dest: "{{ volumes_root }}/homecentr-dns/config/root.zone"
+    dest: "{{ gluster_config_mount_path }}/dns/config/master/root.zone"
+    owner: "{{ cnt_uid }}"
+    group: "{{ cnt_gid }}"
+    mode: '0640'
+    force: yes
+  notify: restart_master
+
+- name: Root zone - DNSSEC private key
+  run_once: true
+  copy:
+    content: "{{ lookup('file', dns_root_domain_private_key_file) }}"
+    dest: "{{ gluster_config_mount_path }}/dns/config/master/Khomecentr.io.+013+29467.private"
+    owner: "{{ cnt_uid }}"
+    group: "{{ cnt_gid }}"
+    mode: '0640'
+    force: yes
+  notify: restart_master
+
+- name: Root zone - DNSSEC public key
+  run_once: true
+  copy:
+    content: "{{ lookup('file', dns_root_domain_public_key_file) }}"
+    dest: "{{ gluster_config_mount_path }}/dns/config/master/Khomecentr.io.+013+29467.key"
     owner: "{{ cnt_uid }}"
     group: "{{ cnt_gid }}"
     mode: '0640'
@@ -24,9 +46,20 @@
   run_once: true
   template:
     src: "{{ role_path }}/templates/root.zone.master.j2"
-    dest: "{{ volumes_root }}/homecentr-dns/config/servers_reverse.zone"
+    dest: "{{ gluster_config_mount_path }}/dns/config/master/servers_reverse.zone"
     owner: "{{ cnt_uid }}"
     group: "{{ cnt_gid }}"
     mode: '0640'
     force: yes
-  notify: restart
+  notify: restart_master
+
+- name: Slave - Named.conf
+  run_once: true
+  template:
+    src: "{{ role_path }}/templates/named.conf.slave.j2"
+    dest: "{{ gluster_config_mount_path }}/dns/config/slave/named.conf"
+    owner: "{{ cnt_uid }}"
+    group: "{{ cnt_gid }}"
+    mode: '0640'
+    force: yes
+  notify: restart_slave

@@ -9,24 +9,55 @@ options {
         recursion yes;
         allow-recursion { any; };
         listen-on { any; };
-        allow-transfer { {{ dns_slave_ip }}; };
+        allow-transfer { localhost; {{ dns_slave_ip }}; };
 
-        notify yes;
-        also-notify { {{ dns_slave_ip }}; };
+        dnssec-enable yes;
+        dnssec-validation auto;
+        dnssec-lookaside auto;
 
         forwarders {
                 {% for forwarder in dns_forwarders %}{{ forwarder }};{% endfor %}
         };
 };
 
+managed-keys { . initial-key 257 3 8 "AwEAAaz/tAm8yTn4Mfeh5eyI96WSVexTBAvkMgJzkKTOiW1vkIbzxeF3+/4RgWOq7HrxRixHlFlExOLAJr5emLvN7SWXgnLh4+B5xQlNVz8Og8kvArMtNROxVQuCaSnIDdD5LKyWbRd2n9WGe2R8PzgCmr3EgVLrjyBxWezF0jLHwVN8efS3rCj/EWgvIWgb9tarpVUDK/b58Da+sqqls3eNbuv7pr+eoZG+SrDK6nWeL3c6H5Apxz7LjVc1uTIdsIXxuOLYA4/ilBmSVIzuDWfdRUfhHdY6+cn8HFRm+2hM8AnXGXws9555KrUB5qihylGa8subX2Nn6UwNR1AkUTV74bU="; };
+
+key "slave_key" {
+        algorithm HMAC-SHA512;
+        secret "{{ dns_secret }}";
+};
+
 // Root zone
 zone "{{ dns_root_domain }}" {
         type master;
         file "root.zone";
+
+        allow-update { none; };
+        notify yes;
+        also-notify { {{ dns_slave_ip }}; };
+        
+        allow-transfer {
+                key "slave_key";
+        };
+
+        inline-signing yes;
+        auto-dnssec maintain;
 };
 
 // Servers subnet reverse zone
 zone "{{ subnet_servers_domain }}.in-addr.arpa" {
         type master;
         file "servers_reverse.zone";
+
+        allow-update { none; };
+        notify yes;
+        also-notify { {{ dns_slave_ip }}; };
+        
+        allow-transfer {
+                key "slave_key";
+        };
+};
+
+statistics-channels {
+  inet * port 8888 allow { 10.0.0.0/8; };
 };

@@ -3,12 +3,14 @@
 
 - name: "Create Directory structure"
   include_tasks: dirs.yml
-  when: dns_mode is defined
 
-- name: "Create Docker configs"
+- name: "Create configs"
   include_tasks: configs.yml
-  when: dns_mode is defined
 
-- name: "Create Docker compose stack"
-  include_tasks: docker.yml
-  when: dns_mode is defined and (dns_mode == "master" or dns_mode == "slave")
+- name: DNS stack
+  run_once: true
+  docker_stack:
+    prune: yes
+    name: homecentr-dns
+    compose:
+      - "{{ lookup('template', 'docker-compose.yml.j2') | from_yaml }}"

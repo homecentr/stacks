@@ -9,9 +9,10 @@
     #- { role: homecentr.docker-macvlan-services }
     #- { role: homecentr.swarm-local-network-connector, cnt_uid: 7001, cnt_gid: 7001 }
     #- { role: homecentr.portainer, cnt_uid: 7002, cnt_gid: "{{ docker_group_gid }}" }
+    
+    - { role: homecentr.dns, cnt_uid: 7003, cnt_gid: 7003 }
 
 
-    #- { role: homecentr.dns, cnt_uid: 2001, cnt_gid: 2001 }
     #- { role: homecentr.monitoring, monitoring_uid: 2004, monitoring_gid: 2004 }
     #- { role: homecentr.macvlan }
     #- { role: homecentr.ingress-proxy, cnt_uid: 2002, cnt_gid: 2002 }

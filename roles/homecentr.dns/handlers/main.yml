@@ -1,2 +1,5 @@
-- name: Restart DNS Master
-  service: "docker service update --force homecentr-dns.master"
+- name: restart_master
+  command: "docker service update --force homecentr-dns_master"
+
+- name: restart_slave
+  command: "docker service update --force homecentr-dns_slave"

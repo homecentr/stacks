@@ -39,7 +39,7 @@
 - name: Ensure Gluster volume is mounted.
   mount:
     src: "{{ inventory_hostname }}:/{{ gluster_config_volume_name }}"
-    path: "/mnt/gfs/{{ gluster_config_volume_name }}"
+    path: "{{ gluster_config_mount_path }}"
     fstype: glusterfs
     opts: "defaults,_netdev"
     state: mounted
