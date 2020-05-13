@@ -39,3 +39,5 @@ all:
     security_fail2ban_enabled: true
     timezone: "Europe/Prague"
     downloads_path: "/tmp"
+    letsencrypt_email: "letsencrypt@lholota.com"
+    letsencrypt_cloudflare_creds: "secrets/cloudflare.ini"

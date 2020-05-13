@@ -1,0 +1,14 @@
+- name: Create group letsencrypt
+  group:
+    name: letsencrypt
+    gid: "{{ cnt_gid }}"
+    state: present
+
+- name: Create user letsencrypt
+  user:
+    name: letsencrypt
+    uid: "{{ cnt_uid }}"
+    group: letsencrypt
+    groups:
+      - letsencrypt
+    state: present

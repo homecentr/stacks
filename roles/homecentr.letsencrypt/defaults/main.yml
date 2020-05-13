@@ -1,0 +1,3 @@
+letsencrypt_docker_image_tag: "linuxserver/letsencrypt"
+letsencrypt_staging: false
+letsencrypt_dhlevel: 2048

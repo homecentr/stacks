@@ -1,0 +1,39 @@
+- include_tasks: iam.yml
+
+
+- name: Create ssl directory
+  run_once: true
+  file:
+    path: "{{ gluster_config_mount_path }}/ssl"
+    state: directory
+    owner: "{{ cnt_uid }}"
+    group: "{{ cnt_gid }}"
+    mode: '0750'
+
+- name: Create dns provider credentials directory
+  run_once: true
+  file:
+    path: "{{ gluster_config_mount_path }}/ssl/dns-conf"
+    state: directory
+    owner: "{{ cnt_uid }}"
+    group: "{{ cnt_gid }}"
+    mode: '0750'
+
+- name: Create Cloudflare credential file
+  run_once: true
+  copy:
+    content: "{{ lookup('file', letsencrypt_cloudflare_creds) }}"
+    dest: "{{ gluster_config_mount_path }}/ssl/dns-conf/cloudflare.ini"
+    owner: "{{ cnt_uid }}"
+    group: "{{ cnt_gid }}"
+    mode: '0640'
+    force: yes
+  notify: restart
+
+- name: LetsEncrypt stack
+  run_once: true
+  docker_stack:
+    prune: yes
+    name: homecentr-letsencrypt
+    compose:
+      - "{{ lookup('template', 'docker-compose.yml.j2') | from_yaml }}"

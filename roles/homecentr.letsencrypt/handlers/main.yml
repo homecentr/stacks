@@ -1,0 +1,2 @@
+- name: restart
+  command: "docker service update --force homecentr-letsencrypt_letsencrypt"
