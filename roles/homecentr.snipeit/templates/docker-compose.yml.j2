@@ -1,0 +1,53 @@
+version: '3.7'
+services:
+  mysql:
+    image: {{ snipeit_mysql_docker_image_tag }}
+    environment:
+      MYSQL_ROOT_PASSWORD: "password"
+      MYSQL_USER: "snipe"
+      MYSQL_PASSWORD: "password"
+      MYSQL_DATABASE: "snipe"
+      PGID: "{{ cnt_gid }}" # TODO: Can the image support setting this directly with user directive ???
+      PUID: "{{ cnt_uid }}"
+    volumes:
+      - "mysql:/var/lib/mysql"
+    networks:
+      - db
+    deploy:
+      mode: replicated
+      replicas: 1
+
+  snipeit:
+    image: {{ snipeit_docker_image_tag }}
+    environment:
+      APP_URL: 192.168.2.16:9003 # TODO: Update when proxy is available
+      MYSQL_PORT_3306_TCP_ADDR: "mysql"
+      MYSQL_PORT_3306_TCP_PORT: "3306"
+      MYSQL_DATABASE: "snipe"
+      MYSQL_USER: "snipe"
+      MYSQL_PASSWORD: "password"
+      PGID: "{{ cnt_gid }}"
+      PUID: "{{ cnt_uid }}"
+    ports:
+      - "9003:80"
+    volumes:
+      - "config:/config"
+      # TODO: Add /var/www/html/storage/app/backups
+    networks:
+      - db
+    deploy:
+      mode: replicated
+      replicas: 1    
+
+networks:
+  db:
+    driver: overlay
+
+volumes:
+  mysql:
+    driver: glusterfs
+    name: "{{ gluster_config_volume_name }}/snipe-it/mysql"  
+
+  config:
+    driver: glusterfs
+    name: "{{ gluster_config_volume_name }}/snipe-it/config"    

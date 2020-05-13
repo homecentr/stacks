@@ -1,0 +1,2 @@
+snipeit_mysql_docker_image_tag: "mysql:5"
+snipeit_docker_image_tag: "linuxserver/snipe-it"

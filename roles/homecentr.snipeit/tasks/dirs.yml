@@ -1,0 +1,17 @@
+- name: Create mysql directory
+  run_once: true
+  file:
+    path: "{{ gluster_config_mount_path }}/snipe-it/mysql"
+    state: directory
+    owner: "{{ cnt_uid }}"
+    group: "{{ cnt_gid }}"
+    mode: '0750'
+
+- name: Create config directory
+  run_once: true
+  file:
+    path: "{{ gluster_config_mount_path }}/snipe-it/config"
+    state: directory
+    owner: "{{ cnt_uid }}"
+    group: "{{ cnt_gid }}"
+    mode: '0750'

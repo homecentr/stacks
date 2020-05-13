@@ -1,0 +1,13 @@
+- name: "Create users & groups"
+  include_tasks: iam.yml
+
+- name: "Create Directory structure"
+  include_tasks: dirs.yml
+
+- name: SnipeIT stack
+  run_once: true
+  docker_stack:
+    prune: yes
+    name: homecentr-snipeit
+    compose:
+      - "{{ lookup('template', 'docker-compose.yml.j2') | from_yaml }}"

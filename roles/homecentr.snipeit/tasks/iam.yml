@@ -1,0 +1,14 @@
+- name: Create group dns
+  group:
+    name: snipeit
+    gid: "{{ cnt_gid }}"
+    state: present
+
+- name: Create user dns
+  user:
+    name: snipeit
+    uid: "{{ cnt_uid }}"
+    group: snipeit
+    groups:
+      - snipeit
+    state: present
