@@ -1,0 +1,27 @@
+- name: Create downloads directory
+  file:
+    path: "{{ downloads_path }}/torrents"
+    state: directory
+    owner: "{{ cnt_uid }}"
+    group: "{{ cnt_gid }}"
+    mode: '0750'
+  when: docker_node_labels is defined and docker_node_labels.media_services is defined and docker_node_labels.media_services == "enabled"
+
+- name: Create config directory
+  run_once: true
+  file:
+    path: "{{ gluster_config_mount_path }}/qbittorrent/config"
+    state: directory
+    owner: "{{ cnt_uid }}"
+    group: "{{ cnt_gid }}"
+    mode: '0750'
+
+- name: Create default config
+  run_once: true
+  template:
+    src: "{{ role_path }}/templates/qBittorrent.conf.j2"
+    dest: "{{ gluster_config_mount_path }}/qbittorrent/config/qBittorrent/qBittorrent.conf"
+    owner: "{{ cnt_uid }}"
+    group: "{{ cnt_gid }}"
+    mode: '0640'
+    force: no

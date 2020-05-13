@@ -1,0 +1,26 @@
+version: '3.7'
+services:
+  qbittorrent:
+    image: {{ qbittorrent_docker_image_tag }}
+    environment:
+      PUID: "{{ cnt_uid }}"
+      PGID: "{{ cnt_gid }}"
+      TZ: "{{ timezone }}"
+      WEBUI_PORT: 9002
+    ports:
+      - "6881:6881"
+      - "6881:6881/udp"
+      - "9002:9002"
+    volumes:
+      - config:/config
+      - {{ downloads_path }}/torrents:/downloads
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints: [node.labels.media_services == enabled]
+      
+volumes:
+  config:
+    driver: glusterfs
+    name: "{{ gluster_config_volume_name }}/qbittorrent/config"

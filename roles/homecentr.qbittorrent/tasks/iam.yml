@@ -1,0 +1,12 @@
+- name: Create group dns
+  group:
+    name: qbittorrent
+    gid: "{{ cnt_gid }}"
+    state: present
+
+- name: Create user qbittorrent
+  user:
+    name: qbittorrent
+    uid: "{{ cnt_uid }}"
+    group: "{{ cnt_gid }}"
+    state: present

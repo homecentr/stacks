@@ -3,21 +3,21 @@ all:
     192.168.2.16:
       hostname: node1
       macvlan_interface: eth0
-      macvlan_ip_range: "192.168.2.32/28"
+      docker_node_labels:
+        media_services: enabled
     192.168.2.17:
       hostname: node2
       macvlan_interface: eth0
-      macvlan_ip_range: "192.168.2.48/28"
     192.168.2.18:
       hostname: node3
       macvlan_interface: eth0
-      macvlan_ip_range: "192.168.2.64/28"
   vars:
     docker_group_gid: 1099
     swarm_init_node_name: 192.168.2.16
     subnet_servers_cidr: 192.168.2.0/24
     subnet_servers_gateway: 192.168.2.1
     subnet_servers_domain: "2.168.192.in-addr.arpa"
+    subnet_servers_services_range: "192.168.2.32/27"
     dns_forwarders:
       - 1.1.1.1
       - 1.0.1.0
@@ -25,11 +25,8 @@ all:
     dns_root_domain_private_key_file: secrets/homecentr.io.private
     dns_root_domain_public_key_file: secrets/homecentr.io.key
     dns_master_ip: 192.168.2.32
-    dns_slave_ip: 192.168.2.48
+    dns_slave_ip: 192.168.2.33
     dns_secret: "yG3o1rEWErq+h0PW4CbK1Q4TCerQwnVLqtDvYyIPoUTzoeB9ToHZeutf7Y5O2eV4ZtAYqqMZw+cRJN9kYTiqpg=="
-    volumes_root: /homecentr
-    volumes_owner: 'rancher'
-    volumes_group: 'docker'
     macvlan_network_name: homecentr-macvlan
     gluster_config_volume_name: cfg
     gluster_config_mount_path: /mnt/gfs/cfg
@@ -40,3 +37,5 @@ all:
     security_ssh_permit_empty_password: "no"
     security_autoupdate_enabled: false
     security_fail2ban_enabled: true
+    timezone: "Europe/Prague"
+    downloads_path: "/tmp"

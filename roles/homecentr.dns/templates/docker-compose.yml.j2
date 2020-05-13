@@ -1,5 +1,12 @@
 version: "3.7"
 services:
+  test_site:
+    image: zembutsu/nginx-sample
+    networks:
+      internal:
+    labels:
+      io.homecentr.local-networks: "[{ \"Network\": \"{{ macvlan_network_name }}\", \"Config\": { \"IPAMConfig\": { \"IPV4Address\": \"192.168.2.40\" } } }]"    
+
   master:
     image: homecentr/dns:latest
     networks:

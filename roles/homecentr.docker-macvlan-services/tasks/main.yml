@@ -8,4 +8,4 @@
     ipam_config:
       - subnet: "{{ subnet_servers_cidr }}"
         gateway: "{{ subnet_servers_gateway }}"
-        iprange: "{{ macvlan_ip_range }}"
+        iprange: "{{ subnet_servers_services_range }}"

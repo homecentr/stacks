@@ -1,6 +1,6 @@
 $TTL    604800
 @       IN      SOA     ns1.{{ dns_root_domain }}. admin.{{ dns_root_domain }}. (
-                  3       ; Serial
+                  4       ; Serial
              604800     ; Refresh
               86400     ; Retry
             2419200     ; Expire
@@ -14,4 +14,11 @@ $TTL    604800
 ns1.{{ dns_root_domain }}.          IN      A       {{ dns_master_ip }}
 ns2.{{ dns_root_domain }}.          IN      A       {{ dns_slave_ip }}
 ;
-; services - A records
+; Cluster individual nodes
+{% for host in ansible_play_hosts_all %}{{ hostvars[host].hostname }}.{{ dns_root_domain }}. IN   A    {{ host }}
+{% endfor %}
+;
+; Cluster round robin
+{% for host in ansible_play_hosts_all %}cluster.{{ dns_root_domain }}. IN   A    {{ host }}
+{% endfor %}
+; services - CNAME records

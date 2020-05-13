@@ -1,0 +1,10 @@
+- include_tasks: iam.yml
+- include_tasks: fs.yml
+
+- name: qBittorrent stack
+  run_once: true
+  docker_stack:
+    prune: yes
+    name: homecentr-qbittorrent
+    compose:
+      - "{{ lookup('template', 'docker-compose.yml.j2') | from_yaml }}"
